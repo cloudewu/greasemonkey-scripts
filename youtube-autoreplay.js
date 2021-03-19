@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube AutoReplay
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Automatically click Replay button after the video ends
 // @author       Cloude
 // @match        http://www.youtube.com/watch*
@@ -16,8 +16,10 @@
   function observerCallback(mutationList, observer) {
     for(let mutation of mutationList) {
       if(mutation.attributeName === 'title' && mutation.target.title.toLowerCase() === "replay") {
-        console.log('[script] auto replay.')
-        mutation.target.click();      // auto click replay
+        setTimeout(()=>{
+          console.log('[script] auto replay.')
+          mutation.target.click(); // auto click replay
+        }, 500);
       }
     }
   }
