@@ -4,9 +4,9 @@
 // @version      0.1
 // @description  Automatically click Replay button after the video ends
 // @author       Cloude
-// @match        http://www.youtube.com/watch/*
+// @match        http://www.youtube.com/watch*
 // @match        http://www.youtube.com/embed/*
-// @match        https://www.youtube.com/watch/*
+// @match        https://www.youtube.com/watch*
 // @match        https://www.youtube.com/embed/*
 // ==/UserScript==
 
@@ -21,7 +21,7 @@
       }
     }
   }
-    
+
   const observer = new MutationObserver(observerCallback);
   const playBtn = document.querySelector('button.ytp-play-button');
   observer.observe(playBtn, {attributes: true});
