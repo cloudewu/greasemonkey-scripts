@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Google Autofocus
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Allow users to focus on searchbar by slash.
 // @author       Cloude
 // @match        http://www.google.com/*
@@ -14,8 +14,8 @@
     'use strict';
 
     const INPUT_SELECTORS = [
-      'form[role=search] input[title="Search"]', // engine top searchbar
       '#search .obcontainer input', // dictionary
+      'form[role=search] input[name=q]', // engine top searchbar
       '#searchbox_form #searchboxinput', // google map
       '#aso_search_form_anchor input[name=q]' // gmail
     ];
@@ -35,7 +35,12 @@
     }
 
     function inputFocused() {
-      return document && document.activeElement && document.activeElement.tagName.toLowerCase() === 'input';
+      const ignoredTags = ['input', 'textarea'];
+      const ignoredRole = ['textbox'];
+      return document && document.activeElement &&
+             (ignoredTags.some(tag => document.activeElement.tagName.toLowerCase() == tag) ||
+              ignoredRole.some(role => document.activeElement.getAttribute('role') == role)
+             );
     }
 
     function moveCursor2End(input) {
@@ -71,7 +76,7 @@
       }
     }
 
-    const searchbar = document.querySelector('form[role=search] input[title="Search"]');
+    const searchbar = document.querySelector('form[role=search] input[name=q]');
     searchbar && searchbar.addEventListener('keydown', onSearchbarKeyDown);
     document.addEventListener('keydown', onGlobalKeyDown);
 
