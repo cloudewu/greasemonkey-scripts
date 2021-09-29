@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube AutoReplay
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Automatically click Replay button after the video ends
 // @author       Cloude
 // @match        http://www.youtube.com/watch*
@@ -18,14 +18,15 @@
     input.setAttribute('type', 'checkbox')
     input.setAttribute('id', 'btn-autoreplay')
     input.setAttribute('title', 'Auto Replay')
+    input.setAttribute('style', 'width: 20px;')
     input.classList.add('ytp-button')
 
-    let container = document.querySelector('#movie_player .ytp-chrome-bottom .ytp-right-controls')
+    let container = document.querySelector('#movie_player .ytp-chrome-controls .ytp-right-controls')
     container.prepend(input)
-    
+
     return input;
   }
-  
+
   function observerCallback(mutationList, observer) {
     for(let mutation of mutationList) {
       if(mutation.attributeName === 'title' && mutation.target.title.toLowerCase() === "replay") {
@@ -38,7 +39,7 @@
 
   const observer = new MutationObserver(observerCallback);
   const playBtn = document.querySelector('button.ytp-play-button');
-  
+
   let autoReplayBtn = addAutoReplayBtn();
   autoReplayBtn.onchange = (e) => {
     if(e.target.checked) {
@@ -49,7 +50,7 @@
       console.log('[script] autoreplay disabled')
     }
   }
-  
+
   window.addEventListener('beforeunload', () => {
     observer.disconnect();
   });
